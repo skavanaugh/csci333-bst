@@ -1,4 +1,5 @@
 #include <string>
+#include <cassert>
 #include "Node.h"
 
 template <typename T>
@@ -15,21 +16,25 @@ T Node<T>::getValue() {
 
 template <typename T>
 Node<T>*& Node<T>::getLeftChild() {
+  assert(this!=0);
   return leftChild;
 }
 
 template <typename T>
 void Node<T>::setLeftChild(Node<T>& lc) {
+  assert(this!=0);
   leftChild = &lc;
 }
 
 template <typename T>
 Node<T>*& Node<T>::getRightChild() {
+  assert(this!=0);
   return rightChild;
 }
 
 template <typename T>
 void Node<T>::setRightChild(Node<T>& rc) {
+  assert(this!=0);
   rightChild = &rc;
 }
 
