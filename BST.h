@@ -11,8 +11,10 @@ class BST {
   Node<T>* root;
   void traversalPrint(Node<T>* root);
 
-  Node<T>* find(T v,Node<T>* curr,Node<T>*& parent);
-  Node<T>* findIOP(Node<T>* curr, Node<T>*& parent);
+  Node<T>* findNode(T val,Node<T>* curr,Node<T>* &parent,bool &isLC,bool &isRC);
+  Node<T>* findIOP(Node<T>* curr, Node<T>* &parent);
+  Node<T>* findIOS(Node<T>* curr, Node<T>* &parent);
+//  void removeTree(Node<T>* curr);
 
  public:
   BST<T>();

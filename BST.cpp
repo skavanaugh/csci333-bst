@@ -6,20 +6,28 @@ using std::cout;
 using std::endl;
 
 template <typename T>
-Node<T>* BST<T>::find(T val,Node<T>* curr,Node<T>*& parent) {
+Node<T>* BST<T>::findNode(T val,Node<T>* curr,Node<T>* &parent,bool &isLC, bool &isRC) {
+  // if (parent!=0) cout<<parent->getValue()<<endl;
   if (curr==0)
     return 0;
   else if (curr->getValue()==val)
     return curr;
-  else if (curr->getValue()<val)
-    return find(val,curr->getLeftChild(),curr);
-  else
-    return find(val,curr->getRightChild(),curr);
+  else if (curr->getValue()>val) {
+    isLC=true;
+    isRC=false;
+    parent=curr;
+    return findNode(val,curr->getLeftChild(),parent,isLC,isRC);
+  }
+  else {
+    isLC=false;
+    isRC=true;
+    parent=curr;
+    return findNode(val,curr->getRightChild(),parent,isLC,isRC);
+  }
 }
 
 template <typename T>
-Node<T>* BST<T>::findIOP(Node<T>* curr,Node*& parent) {
-  Node* curr=0;
+Node<T>* BST<T>::findIOP(Node<T>* curr,Node<T>* &parent) {
   if (curr==0) // should this be an assertion??
     return 0;   
   else if (curr->getLeftChild()==0)
@@ -38,8 +46,7 @@ Node<T>* BST<T>::findIOP(Node<T>* curr,Node*& parent) {
 }
 
 template <typename T>
-Node<T>* BST<T>::findIOS(Node<T>* curr,Node*& parent) {
-  Node* curr=0;
+Node<T>* BST<T>::findIOS(Node<T>* curr,Node<T>* &parent) {
   if (curr==0) // should this be an assertion??
     return 0;   
   else if (curr->getRightChild()==0)
@@ -70,15 +77,24 @@ BST<T>::~BST() {
 
 template <typename T>
 bool BST<T>::find(T v) {
-//  Node<T>* temp = new Node<T>(v);
-//  root = temp;  
-//  return true;
 
   Node<T>* fNode=0;
   Node<T>* parent=0;
+  bool isLC=false;
+  bool isRC=false;
 
-  fNode=find(v,root,parent);
-  
+  fNode=findNode(v,root,parent,isLC,isRC);
+
+  /*
+  if (fNode!=0)
+    cout << "fNode: " << fNode->getValue() << endl;
+  if (parent!=0)
+    cout << "parent: " << parent->getValue() << endl;
+  cout << "isLC: " << isLC << endl;
+  cout << "isRC: " << isRC << endl;  
+  */
+
+ 
   if (fNode==0)
     return false;
   else 
@@ -87,7 +103,37 @@ bool BST<T>::find(T v) {
 
 template <typename T>
 void BST<T>::insert(T v) {
-  Node<T>* temp = new Node<T>(v);
+
+  Node<T>* newNode=new Node<T>(v);
+  Node<T>* curr=root;
+  Node<T>* prev=0;
+
+  if (curr==0) {
+    root=newNode;
+    return;
+  }
+  else if (curr->getValue()==v)
+    return;
+
+  while (curr!=0) {
+    if (v<curr->getValue()) {
+      prev=curr;
+      curr=curr->getLeftChild();
+    }
+    else if (v>curr->getValue()) {
+      prev=curr;
+      curr=curr->getRightChild();
+    }
+    else   // if v==curr->getValue()
+      return;
+  }
+
+  if (v<prev->getValue())
+    prev->setLeftChild(newNode);
+  else
+    prev->setRightChild(newNode);
+
+/*  Node<T>* temp = new Node<T>(v);
   Node<T>** curr = &root;
 
   while (*curr != 0) {
@@ -98,20 +144,31 @@ void BST<T>::insert(T v) {
     }
   }
   *curr = temp;
+ */
 }
 
 template <typename T>
 void BST<T>::remove(T v) {
-//  Node<T>* temp = new Node<T>(v);
-//  root = temp;
 
-  Node* parent=0;
-  Node* remNode=find(v,root,parent); // node to be removed
-  Node* remLCNode=remNode->getLeftChild();
-  Node* remRCNode=remNode->getRightChild();
+  bool isLC=false;
+  bool isRC=false;
+  Node<T>* parent=0;
+  Node<T>* remNode=findNode(v,root,parent,isLC,isRC); // node to be removed
+  Node<T>* remLCNode=remNode->getLeftChild();  // left child of node to be removed
+  Node<T>* remRCNode=remNode->getRightChild(); // right child of node to be removed
+  
+  if (parent!=0) cout<<"parent: " << parent->getValue()<<endl;
+  if (remNode!=0) {
+    cout<<"remNode: " << remNode->getValue()<<endl;
+  }
+  cout << "isLC: " << isLC << endl;
+  cout << "isRC: " << isRC << endl;
+  if (remLCNode!=0) cout << "remLCNode: " << remLCNode->getValue() << endl;
+  if (remRCNode!=0) cout << "remRCNode: " << remRCNode->getValue() << endl;
+
 
   if (remLCNode==0 && remRCNode==0) {
-    if (parent->getLeftChild()==v) {
+    if (isLC) {
       parent->setLeftChild(0);
       delete remNode;
     }
@@ -121,7 +178,7 @@ void BST<T>::remove(T v) {
     }
   }
   else if (remLCNode==0 && remRCNode!=0) {
-    if (parent->getLeftChild()==v) {
+    if (isLC) {
       parent->setLeftChild(remRCNode);
       delete remNode;
     }
@@ -131,12 +188,12 @@ void BST<T>::remove(T v) {
     }
   }
   else if (remLCNode!=0 && remRCNode==0) {
-    if (parent->getLeftChild()==v) {
-      parent->setLeftChld(remLCNode);
+    if (isLC) {
+      parent->setLeftChild(remLCNode);
       delete remNode;
     }
     else {
-      parent->setLeftChild(remRCNode);
+      parent->setRightChild(remRCNode);
       delete remNode;
     }
   }
@@ -160,4 +217,4 @@ void BST<T>::traversalPrint(Node<T>* root) {
 
 template class BST<int>;
 template class BST<double>;
-template class BST<std::string>;
+//template class BST<std::string>;
