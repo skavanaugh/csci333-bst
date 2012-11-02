@@ -36,12 +36,12 @@ Node<T>* BST<T>::findIOP(Node<T>* curr,Node<T>* &parent) {
     parent=curr;
     curr=curr->getLeftChild();
   }
-
-  while (curr!=0) {
+    
+  while (curr->getRightChild()!=0) {
     parent=curr;
     curr=curr->getRightChild();
   }
-
+  
   return curr;
 }
 
@@ -56,7 +56,7 @@ Node<T>* BST<T>::findIOS(Node<T>* curr,Node<T>* &parent) {
     curr=curr->getRightChild();
   }
 
-  while (curr!=0) {
+  while (curr->getLeftChild()!=0) {
     parent=curr;
     curr=curr->getLeftChild();
   }
@@ -147,16 +147,28 @@ void BST<T>::insert(T v) {
  */
 }
 
+/*
+template <typename T>
+void BST<T>::removeNode(Node<T>* remNode) {
+
+}
+*/
+
 template <typename T>
 void BST<T>::remove(T v) {
 
-  bool isLC=false;
-  bool isRC=false;
+  bool isLC=false;  // remNode is LC of parent?
+  bool isRC=false;  // remNode is RC of parent?
   Node<T>* parent=0;
   Node<T>* remNode=findNode(v,root,parent,isLC,isRC); // node to be removed
-  Node<T>* remLCNode=remNode->getLeftChild();  // left child of node to be removed
-  Node<T>* remRCNode=remNode->getRightChild(); // right child of node to be removed
   
+  if (remNode==0) // remNode not in BST
+    return;
+
+  Node<T>* remLCNode=remNode->getLeftChild();  // LC of node to be removed
+  Node<T>* remRCNode=remNode->getRightChild(); // RC of node to be removed
+
+/*  
   if (parent!=0) cout<<"parent: " << parent->getValue()<<endl;
   if (remNode!=0) {
     cout<<"remNode: " << remNode->getValue()<<endl;
@@ -165,6 +177,7 @@ void BST<T>::remove(T v) {
   cout << "isRC: " << isRC << endl;
   if (remLCNode!=0) cout << "remLCNode: " << remLCNode->getValue() << endl;
   if (remRCNode!=0) cout << "remRCNode: " << remRCNode->getValue() << endl;
+*/
 
 
   if (remLCNode==0 && remRCNode==0) {
@@ -198,7 +211,29 @@ void BST<T>::remove(T v) {
     }
   }
 
+  else {  // remNode has two children (need to use IOS or IOP)
+    Node<T>* iopParent=0;
+    Node<T>* iop=findIOP(remNode,iopParent);
+    Node<T>* newIOP=new Node<T>(iop->getValue());
 
+    // cout << "IOP: " << iop->getValue() << endl;
+    remove(iop->getValue());
+    // cout << "Past 2nd remove." << endl;    
+    
+
+    if (isLC) {
+      parent->setLeftChild(newIOP);
+      newIOP->setLeftChild(remNode->getLeftChild());
+      newIOP->setRightChild(remNode->getRightChild());
+      delete remNode;
+    }
+    else {
+      parent->setRightChild(newIOP);
+      newIOP->setLeftChild(remNode->getLeftChild());
+      newIOP->setRightChild(remNode->getRightChild());
+      delete remNode;
+    }
+  }
 }
 
 template <typename T>
