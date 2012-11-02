@@ -5,6 +5,7 @@ using std::cout;
 using std::endl;
 
 int main() {
+/*
   BST<int>* bst = new BST<int>();
 
   bst->insert(10);
@@ -37,5 +38,21 @@ int main() {
   cout<<endl;
  
   bst->remove(7);
-  bst->print(); 
+  bst->print();
+
+  delete bst;
+*/ 
+
+  BST<int>* b=new BST<int>();
+  b->insert(10);
+  b->insert(5);
+  b->insert(15);
+  b->insert(1);
+  b->insert(7);
+  b->insert(11);
+  b->insert(17);
+
+  b->print();
+  
+  delete b;
 }

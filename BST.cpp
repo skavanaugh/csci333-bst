@@ -1,9 +1,12 @@
 #include "BST.h"
 #include <cassert>
 #include <iostream>
+#include <vector>
+#include <cmath>
 
 using std::cout;
 using std::endl;
+using std::vector;
 
 template <typename T>
 Node<T>* BST<T>::findNode(T val,Node<T>* curr,Node<T>* &parent,bool &isLC, bool &isRC) {
@@ -238,7 +241,9 @@ void BST<T>::remove(T v) {
 
 template <typename T>
 void BST<T>::print() {
-  traversalPrint(root);
+  printTree(); 
+
+  // traversalPrint(root);
 }
 
 template <typename T>
@@ -248,6 +253,70 @@ void BST<T>::traversalPrint(Node<T>* root) {
     std::cout << root->getValue() << std::endl;
     traversalPrint(root->getRightChild());
   }
+}
+
+template <typename T>
+void BST<T>::printTree() {
+
+  bool isEmptyLevel=false; 
+  int numLevels=0;
+
+  vector<vector<Node<T>* > > levelVector;
+  vector<Node<T>* > currLevel(1,root);
+
+  // currLevel[0]=root;
+  if (currLevel[0]==0) {
+    isEmptyLevel=true;
+  }
+  else {
+    levelVector.push_back(currLevel);
+    numLevels++;
+  }
+
+  // int numLevels=1;
+  // int numEmptyNodes=0;
+  
+  while (isEmptyLevel==false) {  
+
+    currLevel.resize(2*levelVector[numLevels-1].size());
+    for (int i=0;i<levelVector[numLevels-1].size();i++) {
+      if (levelVector[numLevels-1][i]!=0) {
+        currLevel[2*i]=levelVector[numLevels-1][i]->getLeftChild();
+        currLevel[2*i+1]=levelVector[numLevels-1][i]->getRightChild();
+      }
+      else {
+        currLevel[2*i]=0;
+        currLevel[2*i+1]=0;
+      } 
+    }
+  
+    // bool isEmptyLevel=false;
+    for (int i=0;i<currLevel.size();i++) {
+      if (currLevel[i]!=0) {
+        isEmptyLevel=false;
+        break;
+      }
+    isEmptyLevel=true;
+    }
+  
+    if (isEmptyLevel==false) {
+      levelVector.push_back(currLevel);
+      numLevels++;
+    }
+  }   
+
+  // now print it out
+
+  for (int i=0;i<levelVector.size();i++) {
+    for (int j=0;j<levelVector[i].size();j++) {
+      if (levelVector[i][j]!=0)
+        cout << levelVector[i][j]->getValue() << " ";
+      else
+        cout << "";
+    }
+    cout << endl;
+  }
+
 }
 
 template class BST<int>;

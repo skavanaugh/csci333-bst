@@ -15,6 +15,7 @@ class BST {
   Node<T>* findIOP(Node<T>* curr, Node<T>* &parent);
   Node<T>* findIOS(Node<T>* curr, Node<T>* &parent);
 //  void removeTree(Node<T>* curr);
+  void printTree();
 
  public:
   BST<T>();
