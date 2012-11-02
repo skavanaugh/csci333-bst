@@ -291,7 +291,7 @@ void BST<T>::printTree() {
   while (isEmptyLevel==false) {  
 
     currLevel.resize(2*levelVector[numLevels-1].size());
-    for (int i=0;i<levelVector[numLevels-1].size();i++) {
+    for (unsigned int i=0;i<levelVector[numLevels-1].size();i++) {
       if (levelVector[numLevels-1][i]!=0) {
         currLevel[2*i]=levelVector[numLevels-1][i]->getLeftChild();
         currLevel[2*i+1]=levelVector[numLevels-1][i]->getRightChild();
@@ -303,7 +303,7 @@ void BST<T>::printTree() {
     }
   
     // bool isEmptyLevel=false;
-    for (int i=0;i<currLevel.size();i++) {
+    for (unsigned int i=0;i<currLevel.size();i++) {
       if (currLevel[i]!=0) {
         isEmptyLevel=false;
         break;
@@ -319,8 +319,8 @@ void BST<T>::printTree() {
 
   // now print it out
 
-  for (int i=0;i<levelVector.size();i++) {
-    for (int j=0;j<levelVector[i].size();j++) {
+  for (unsigned int i=0;i<levelVector.size();i++) {
+    for (unsigned int j=0;j<levelVector[i].size();j++) {
       if (levelVector[i][j]!=0)
         cout << levelVector[i][j]->getValue() << " ";
       else

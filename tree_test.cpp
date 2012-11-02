@@ -50,7 +50,8 @@ int main() {
   b->insert(7);
   b->insert(11);
   b->insert(17);
-
+  
+  cout << endl;
   b->print();
   
   delete b;
