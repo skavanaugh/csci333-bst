@@ -31,7 +31,7 @@ Node<T>* BST<T>::findNode(T val,Node<T>* curr,Node<T>* &parent,bool &isLC, bool 
 
 template <typename T>
 Node<T>* BST<T>::findIOP(Node<T>* curr,Node<T>* &parent) {
-  if (curr==0) // should this be an assertion??
+  if (curr==0) 
     return 0;   
   else if (curr->getLeftChild()==0)
     return 0;
@@ -50,7 +50,7 @@ Node<T>* BST<T>::findIOP(Node<T>* curr,Node<T>* &parent) {
 
 template <typename T>
 Node<T>* BST<T>::findIOS(Node<T>* curr,Node<T>* &parent) {
-  if (curr==0) // should this be an assertion??
+  if (curr==0) 
     return 0;   
   else if (curr->getRightChild()==0)
     return 0;
@@ -68,13 +68,22 @@ Node<T>* BST<T>::findIOS(Node<T>* curr,Node<T>* &parent) {
 }
 
 template <typename T>
+void BST<T>::removeTree(Node<T>* curr) {
+  if (curr!=0) {
+    removeTree(curr->getLeftChild());
+    removeTree(curr->getRightChild());
+    delete curr;
+  }
+}
+
+template <typename T>
 BST<T>::BST() {
   root = 0;
 }
 
 template <typename T>
 BST<T>::~BST() {
-  
+  removeTree(root);  
 }
 
 
@@ -115,9 +124,10 @@ void BST<T>::insert(T v) {
     root=newNode;
     return;
   }
-  else if (curr->getValue()==v)
+  else if (curr->getValue()==v) {
+    delete newNode;
     return;
-
+  }
   while (curr!=0) {
     if (v<curr->getValue()) {
       prev=curr;
@@ -127,8 +137,10 @@ void BST<T>::insert(T v) {
       prev=curr;
       curr=curr->getRightChild();
     }
-    else   // if v==curr->getValue()
+    else {  // if v==curr->getValue()
+      delete newNode;
       return;
+    }
   }
 
   if (v<prev->getValue())
@@ -312,7 +324,7 @@ void BST<T>::printTree() {
       if (levelVector[i][j]!=0)
         cout << levelVector[i][j]->getValue() << " ";
       else
-        cout << "";
+        cout << "X ";
     }
     cout << endl;
   }

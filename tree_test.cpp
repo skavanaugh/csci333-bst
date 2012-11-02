@@ -5,7 +5,7 @@ using std::cout;
 using std::endl;
 
 int main() {
-/*
+
   BST<int>* bst = new BST<int>();
 
   bst->insert(10);
@@ -41,8 +41,7 @@ int main() {
   bst->print();
 
   delete bst;
-*/ 
-
+ 
   BST<int>* b=new BST<int>();
   b->insert(10);
   b->insert(5);
