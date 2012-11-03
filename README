@@ -1,0 +1,18 @@
+Binary Search Tree -- implementing remove and print
+
+This project involved working with a binary search tree, first to implement find, insert and remove in the BST and then to write a print method which displays the "shape" of the BST.
+
+A few notes:
+I implemented the remove method in three different ways.  
+
+1) The removeStd method removes a node according to the algorithms described in class, namely, if the node to be removed (remNode) has 0 or 1 children, the remNode's parent is connected to the remNode's child or 0 as appropriate.  If the remNode has two children, we find the IOP (or IOS) and make the right child of the IOP, remNode's right child.  Then the parent of remNode is connected to remNode's left child and remNode is deleted.
+
+2) The remove method does the same thing as above for a remNode with 0 or 1 children.  With 2 children, this method finds the IOP (or IOS) and makes a new Node with the IOP's value.  It then calls the remove method on the IOP (which can only have 0 or 1 children and is thus a simple case not involving another IOP.)  Then this method points the parent of the remNode to the newIOP node and the newIOP node to remNode's children.  Finally, remNode is deleted.
+
+3) This is a mutable version of method 2 above and was called removeMutable.  0 and 1 children of remNode yields the same procedure for all implementations.  For 2 children of remNode, this method finds the IOP, stores the value of the IOP, calls remove on the IOP value.  It then changes the value of remNode to the IOP's value.  This was the simplest implementation and perhaps the most straightforward but sacrificed the potential for immutability of Nodes.  However, methods 2 and 3 did keep the tree on fewer levels which has some benefit.
+
+Please note that in a real production setting, you would probably want to alternate between the IOP and IOS, perhaps strictly alternating between the two, perhaps randomly, to try to keep the BST balanced.  The more balanced the BST is, the fewer maximum operations will be needed to interact with the BST.  Here, I coded the findIOS method, but in the three remove methods, so far I have only used the IOP.
+
+For the print method, I used a vector of vectors of Node pointers to store the information from the BST.  The first row vector has one element, the root.  The next row has 2 elements.  The next row 4, then 8, then 16, then 32 and so on.  To fill a row, I looked at the previous row and found the left and right children of each non zero Node*.  If a Node* was 0, I just filled in 0's as appropriate.  After filling the vector of vectors, I first just printed out the 2D vector.  Then I did some work on spacing to try to capture the shape of the BST.  There is a const int WIDTH which is currently set = 6 but can be changed around as desired.  WIDTH can be thought of as the number of spaces in the bottom row between elements.  If a Node* is 0, I filled in an "X".  I experimented with WIDTH of 4,6 and 8 and the BST quickly explodes beyond the capacity to fit on the screen with any of these settings.  After 5 or 6 rows the tree starts to go onto the next line and as currently implemented the printTree method loses a significant portion of its value.  The larger WIDTH makes the relationship between the nodes more clear but starts wrapping over the end of a line more quickly. 
+
+ 
