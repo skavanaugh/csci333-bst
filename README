@@ -1,6 +1,6 @@
 Binary Search Tree -- implementing remove and print
 
-This project involved working with a binary search tree, first to implement find, insert and remove in the BST and then to write a print method which displays the "shape" of the BST.
+This project involved working with a binary search tree, first to implement find, insert and remove in the BST and then to write a print method which displays the "shape" of the BST.  I worked together with Billy Mills throughout this project.  I also interacted more casually with a few other students including Avi, Jack, Michael and Zack.
 
 A few notes:
 I implemented the remove method in three different ways.  
