@@ -21,14 +21,14 @@ int main() {
   bst->insert(21);
 
   bst->print();
-/*  
+  
   cout<<endl;
   cout<<bst->find(10)<<endl;
   cout<<bst->find(17)<<endl;
   cout<<bst->find(18)<<endl;
   cout<<bst->find(1)<<endl;
   cout<<endl;
-*/
+
   bst->removeMutable(20);
   bst->print();
   cout<<endl;
@@ -41,7 +41,20 @@ int main() {
   bst->print();
 
   delete bst;
- 
+
+  BST<double>* db=new BST<double>();
+  db->insert(7.5);
+  db->insert(12.98);
+  db->insert(3.45);
+  db->insert(-2.58);
+  db->insert(99.1);
+  db->print();
+  db->removeStd(12.98);
+  db->removeStd(7.5);
+  db->removeStd(5.34353);
+  db->print();
+  delete db;
+
   BST<int>* b=new BST<int>();
   b->insert(10);
   b->insert(5);
@@ -57,9 +70,14 @@ int main() {
   b->insert(8);
   b->insert(9);
 
-  cout << endl;
   b->print();
-  
-  delete b;
+ 
+  b->remove(15);
+  b->remove(12);
+  b->remove(10);
+  b->print();
+  b->remove(19);
+  b->print();
 
+  delete b;
 }
