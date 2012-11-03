@@ -2,7 +2,6 @@
 #include <cassert>
 #include <iostream>
 #include <vector>
-//#include <cmath>
 
 using std::cout;
 using std::endl;
@@ -95,15 +94,6 @@ bool BST<T>::find(T v) {
 
   fNode=findNode(v,root,parent,isLC,isRC);
 
-  /*
-  if (fNode!=0)
-    cout << "fNode: " << fNode->getValue() << endl;
-  if (parent!=0)
-    cout << "parent: " << parent->getValue() << endl;
-  cout << "isLC: " << isLC << endl;
-  cout << "isRC: " << isRC << endl;  
-  */
- 
   if (fNode==0)
     return false;
   else 
@@ -145,26 +135,7 @@ void BST<T>::insert(T v) {
   else
     prev->setRightChild(newNode);
 
-/*  Node<T>* temp = new Node<T>(v);
-  Node<T>** curr = &root;
-
-  while (*curr != 0) {
-    if (v < (*curr)->getValue()) {
-      curr = &((*curr)->getLeftChild());
-    } else if (v > (*curr)->getValue()) {
-      curr = &((*curr)->getRightChild());
-    }
-  }
-  *curr = temp;
- */
 }
-
-/*
-template <typename T>
-void BST<T>::removeNode(Node<T>* remNode) {
-
-}
-*/
 
 template <typename T>
 void BST<T>::remove(T v) {
@@ -180,24 +151,17 @@ void BST<T>::remove(T v) {
   Node<T>* remLCNode=remNode->getLeftChild();  // LC of node to be removed
   Node<T>* remRCNode=remNode->getRightChild(); // RC of node to be removed
 
-/*  
-  if (parent!=0) cout<<"parent: " << parent->getValue()<<endl;
-  if (remNode!=0) {
-    cout<<"remNode: " << remNode->getValue()<<endl;
-  }
-  cout << "isLC: " << isLC << endl;
-  cout << "isRC: " << isRC << endl;
-  if (remLCNode!=0) cout << "remLCNode: " << remLCNode->getValue() << endl;
-  if (remRCNode!=0) cout << "remRCNode: " << remRCNode->getValue() << endl;
-*/
-
   if (remLCNode==0 && remRCNode==0) {
     if (isLC) {
       parent->setLeftChild(0);
       delete remNode;
     }
-    else {
+    else if (isRC) {
       parent->setRightChild(0);
+      delete remNode;
+    }
+    else {  
+      root=0;
       delete remNode;
     }
   }
@@ -206,18 +170,27 @@ void BST<T>::remove(T v) {
       parent->setLeftChild(remRCNode);
       delete remNode;
     }
-    else {
+    else if (isRC) {
       parent->setRightChild(remRCNode);
       delete remNode;
     }
+    else {
+      root=remRCNode;
+      delete remNode;
+    }
+
   }
   else if (remLCNode!=0 && remRCNode==0) {
     if (isLC) {
       parent->setLeftChild(remLCNode);
       delete remNode;
     }
-    else {
+    else if (isRC) {
       parent->setRightChild(remRCNode);
+      delete remNode;
+    }
+    else {
+      root=remLCNode;
       delete remNode;
     }
   }
@@ -227,10 +200,7 @@ void BST<T>::remove(T v) {
     Node<T>* iop=findIOP(remNode,iopParent);
     Node<T>* newIOP=new Node<T>(iop->getValue());
 
-    // cout << "IOP: " << iop->getValue() << endl;
     remove(iop->getValue());
-    // cout << "Past 2nd remove." << endl;    
-    
 
     if (isLC) {
       parent->setLeftChild(newIOP);
@@ -238,10 +208,16 @@ void BST<T>::remove(T v) {
       newIOP->setRightChild(remNode->getRightChild());
       delete remNode;
     }
-    else {
+    else if (isRC) {
       parent->setRightChild(newIOP);
       newIOP->setLeftChild(remNode->getLeftChild());
       newIOP->setRightChild(remNode->getRightChild());
+      delete remNode;
+    }
+    else {
+      newIOP->setLeftChild(remNode->getLeftChild());
+      newIOP->setRightChild(remNode->getRightChild());
+      root=newIOP;
       delete remNode;
     }
   }
@@ -261,24 +237,17 @@ void BST<T>::removeMutable(T v) {
   Node<T>* remLCNode=remNode->getLeftChild();  // LC of node to be removed
   Node<T>* remRCNode=remNode->getRightChild(); // RC of node to be removed
 
-/*  
-  if (parent!=0) cout<<"parent: " << parent->getValue()<<endl;
-  if (remNode!=0) {
-    cout<<"remNode: " << remNode->getValue()<<endl;
-  }
-  cout << "isLC: " << isLC << endl;
-  cout << "isRC: " << isRC << endl;
-  if (remLCNode!=0) cout << "remLCNode: " << remLCNode->getValue() << endl;
-  if (remRCNode!=0) cout << "remRCNode: " << remRCNode->getValue() << endl;
-*/
-
   if (remLCNode==0 && remRCNode==0) {
     if (isLC) {
       parent->setLeftChild(0);
       delete remNode;
     }
-    else {
+    else if (isRC) {
       parent->setRightChild(0);
+      delete remNode;
+    }
+    else {
+      root=0;
       delete remNode;
     }
   }
@@ -287,18 +256,27 @@ void BST<T>::removeMutable(T v) {
       parent->setLeftChild(remRCNode);
       delete remNode;
     }
-    else {
+    else if (isRC) {
       parent->setRightChild(remRCNode);
       delete remNode;
     }
+    else {
+      root=remRCNode;
+      delete remNode;
+    }
+
   }
   else if (remLCNode!=0 && remRCNode==0) {
     if (isLC) {
       parent->setLeftChild(remLCNode);
       delete remNode;
     }
-    else {
+    else if (isRC) {
       parent->setRightChild(remRCNode);
+      delete remNode;
+    }
+    else {
+      root=remLCNode;
       delete remNode;
     }
   }
@@ -306,32 +284,13 @@ void BST<T>::removeMutable(T v) {
   else {  // remNode has two children (need to use IOS or IOP)
     Node<T>* iopParent=0;
     Node<T>* iop=findIOP(remNode,iopParent);
-    // Node<T>* newIOP=new Node<T>(iop->getValue());
     T iopVal;
 
-    if (iop!=0)
+    if (iop!=0) {
       iopVal=iop->getValue();
-  
-    
-    // cout << "IOP: " << iop->getValue() << endl;
-    remove(iop->getValue());
-    // cout << "Past 2nd remove." << endl;    
-    remNode->setValue(iopVal);  
-/*
-    if (isLC) {
-      parent->setLeftChild(newIOP);
-      newIOP->setLeftChild(remNode->getLeftChild());
-      newIOP->setRightChild(remNode->getRightChild());
-      delete remNode;
-    }
-    else {
-      parent->setRightChild(newIOP);
-      newIOP->setLeftChild(remNode->getLeftChild());
-      newIOP->setRightChild(remNode->getRightChild());
-      delete remNode;
-    }
-*/
-
+      remove(iop->getValue());
+      remNode->setValue(iopVal);
+    }  
   }
 }
 
@@ -349,24 +308,17 @@ void BST<T>::removeStd(T v) {
   Node<T>* remLCNode=remNode->getLeftChild();  // LC of node to be removed
   Node<T>* remRCNode=remNode->getRightChild(); // RC of node to be removed
 
-/*  
-  if (parent!=0) cout<<"parent: " << parent->getValue()<<endl;
-  if (remNode!=0) {
-    cout<<"remNode: " << remNode->getValue()<<endl;
-  }
-  cout << "isLC: " << isLC << endl;
-  cout << "isRC: " << isRC << endl;
-  if (remLCNode!=0) cout << "remLCNode: " << remLCNode->getValue() << endl;
-  if (remRCNode!=0) cout << "remRCNode: " << remRCNode->getValue() << endl;
-*/
-
   if (remLCNode==0 && remRCNode==0) {
     if (isLC) {
       parent->setLeftChild(0);
       delete remNode;
     }
-    else {
+    else if (isRC) {
       parent->setRightChild(0);
+      delete remNode;
+    }
+    else {
+      root=0;
       delete remNode;
     }
   }
@@ -375,8 +327,12 @@ void BST<T>::removeStd(T v) {
       parent->setLeftChild(remRCNode);
       delete remNode;
     }
-    else {
+    else if (isRC) {
       parent->setRightChild(remRCNode);
+      delete remNode;
+    }
+    else {
+      root=remRCNode;
       delete remNode;
     }
   }
@@ -385,8 +341,12 @@ void BST<T>::removeStd(T v) {
       parent->setLeftChild(remLCNode);
       delete remNode;
     }
-    else {
+    else if (isRC) {
       parent->setRightChild(remRCNode);
+      delete remNode;
+    }
+    else {
+      root=remLCNode;
       delete remNode;
     }
   }
@@ -394,36 +354,28 @@ void BST<T>::removeStd(T v) {
   else {  // remNode has two children (need to use IOS or IOP)
     Node<T>* iopParent=0;
     Node<T>* iop=findIOP(remNode,iopParent);
-    Node<T>* newIOP=new Node<T>(iop->getValue());
-
-    // cout << "IOP: " << iop->getValue() << endl;
-    remove(iop->getValue());
-    // cout << "Past 2nd remove." << endl;    
     
+    iop->setRightChild(remRCNode);
 
     if (isLC) {
-      parent->setLeftChild(newIOP);
-      newIOP->setLeftChild(remNode->getLeftChild());
-      newIOP->setRightChild(remNode->getRightChild());
+      parent->setLeftChild(remLCNode);
+      delete remNode;
+    }
+    else if (isRC) {
+      cout << "isRC about to setRightChild." << endl;
+      parent->setRightChild(remLCNode);
       delete remNode;
     }
     else {
-      parent->setRightChild(newIOP);
-      newIOP->setLeftChild(remNode->getLeftChild());
-      newIOP->setRightChild(remNode->getRightChild());
+      root=iop;
       delete remNode;
     }
   }
 }
 
-
-
-
 template <typename T>
 void BST<T>::print() {
   printTree(); 
-
-  // traversalPrint(root);
 }
 
 template <typename T>
@@ -451,7 +403,7 @@ void BST<T>::printTree() {
     levelVector.push_back(currLevel);
     numLevels++;
   }
-  
+
   while (isEmptyLevel==false) {  
 
     currLevel.resize(2*levelVector[numLevels-1].size());
@@ -466,7 +418,6 @@ void BST<T>::printTree() {
       } 
     }
   
-    // bool isEmptyLevel=false;
     for (unsigned int i=0;i<currLevel.size();i++) {
       if (currLevel[i]!=0) {
         isEmptyLevel=false;
@@ -498,7 +449,7 @@ void BST<T>::printTree() {
     for (unsigned int j=0;j<levelVector[i].size();j++) {
       if (j==0)
         printSpaces(vStart[i]);
-      else // if (j<levelVector[i].size()-1)
+      else
         printSpaces(vBetween[i]-1);
 
       if (levelVector[i][j]!=0)
@@ -510,8 +461,7 @@ void BST<T>::printTree() {
   }
   cout << endl << endl;
 
-
-
+// the following code prints the vectors without formatting
 /*
   for (unsigned int i=0;i<levelVector.size();i++) {
     for (unsigned int j=0;j<levelVector[i].size();j++) {
@@ -531,8 +481,6 @@ void BST<T>::printSpaces(int n) {
     cout << " ";
   }
 }
-
-
 
 template class BST<int>;
 template class BST<double>;
