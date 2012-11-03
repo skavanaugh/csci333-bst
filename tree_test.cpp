@@ -52,6 +52,10 @@ int main() {
   b->insert(17);
   b->insert(18);
   b->insert(12);
+  b->insert(14);
+  b->insert(19);
+  b->insert(8);
+  b->insert(9);
 
   cout << endl;
   b->print();

@@ -483,7 +483,7 @@ void BST<T>::printTree() {
 
   // now print it out
 
-  int WIDTH=4;
+  const int WIDTH=6;
   vector<int> vStart(levelVector.size());
   vector<int> vBetween(levelVector.size());
   vStart[levelVector.size()-1]=0;
