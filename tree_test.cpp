@@ -14,30 +14,30 @@ int main() {
   bst->insert(20);
   bst->insert(16);
   bst->insert(17);
-  bst->insert(18);
   bst->insert(23);
+  // bst->insert(18);
   bst->insert(24);
   bst->insert(15);
   bst->insert(21);
 
   bst->print();
-  
+/*  
   cout<<endl;
   cout<<bst->find(10)<<endl;
   cout<<bst->find(17)<<endl;
   cout<<bst->find(18)<<endl;
   cout<<bst->find(1)<<endl;
   cout<<endl;
-
-  bst->remove(20);
+*/
+  bst->removeMutable(20);
   bst->print();
   cout<<endl;
 
-  bst->remove(23);
+  bst->removeMutable(23);
   bst->print();
   cout<<endl;
  
-  bst->remove(7);
+  bst->removeMutable(10);
   bst->print();
 
   delete bst;
@@ -50,9 +50,12 @@ int main() {
   b->insert(7);
   b->insert(11);
   b->insert(17);
-  
+  b->insert(18);
+  b->insert(12);
+
   cout << endl;
   b->print();
   
   delete b;
+
 }

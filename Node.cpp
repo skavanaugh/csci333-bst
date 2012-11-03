@@ -11,7 +11,14 @@ Node<T>::Node(T v) {
 
 template <typename T>
 T Node<T>::getValue() {
+  assert(this!=0);
   return value;
+}
+
+template <typename T>
+void Node<T>::setValue(T v) {
+  assert(this!=0);
+  value = v;
 }
 
 template <typename T>

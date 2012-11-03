@@ -16,13 +16,16 @@ class BST {
   Node<T>* findIOS(Node<T>* curr, Node<T>* &parent);
   void removeTree(Node<T>* curr);
   void printTree();
-
+  void printSpaces(int n);
+  
  public:
   BST<T>();
   ~BST<T>();
 
   bool find(T v);
   void remove(T v);
+  void removeMutable(T v);
+  void removeStd(T v);
   void insert(T v);
   void print();
 };
