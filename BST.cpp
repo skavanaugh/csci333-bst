@@ -362,7 +362,6 @@ void BST<T>::removeStd(T v) {
       delete remNode;
     }
     else if (isRC) {
-      cout << "isRC about to setRightChild." << endl;
       parent->setRightChild(remLCNode);
       delete remNode;
     }
@@ -461,7 +460,8 @@ void BST<T>::printTree() {
   }
   cout << endl << endl;
 
-// the following code prints the vectors without formatting
+// the following code prints the vectors left justified (without formatting)
+// i may use this code another time
 /*
   for (unsigned int i=0;i<levelVector.size();i++) {
     for (unsigned int j=0;j<levelVector[i].size();j++) {
