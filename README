@@ -60,5 +60,9 @@ method loses a significant portion of its value.  The larger WIDTH makes the
 relationship between the nodes more clear but starts wrapping over the end of a
 line more quickly. 
 
+<<<<<<< HEAD
 I used Valgrind to test for memory leaks and according to Valgrind, with the
 tests I've run so far, the code is not leaking. 
+=======
+I used Valgrind to test for memory leaks and according to Valgrind, with the tests I've run so far, the code is not leaking.  
+>>>>>>> 7ae177abf4010f2f4ca3c0d34e1a444a2a513fff
