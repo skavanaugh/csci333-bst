@@ -186,7 +186,7 @@ void BST<T>::remove(T v) {
       delete remNode;
     }
     else if (isRC) {
-      parent->setRightChild(remRCNode);
+      parent->setRightChild(remLCNode);
       delete remNode;
     }
     else {
@@ -272,7 +272,7 @@ void BST<T>::removeMutable(T v) {
       delete remNode;
     }
     else if (isRC) {
-      parent->setRightChild(remRCNode);
+      parent->setRightChild(remLCNode);
       delete remNode;
     }
     else {
@@ -342,7 +342,7 @@ void BST<T>::removeStd(T v) {
       delete remNode;
     }
     else if (isRC) {
-      parent->setRightChild(remRCNode);
+      parent->setRightChild(remLCNode);
       delete remNode;
     }
     else {
@@ -388,6 +388,9 @@ void BST<T>::traversalPrint(Node<T>* root) {
 
 template <typename T>
 void BST<T>::printTree() {
+
+  if (root==0)
+    return;
 
   bool isEmptyLevel=false; 
   int numLevels=0;
